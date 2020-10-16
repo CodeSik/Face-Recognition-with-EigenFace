@@ -1,7 +1,7 @@
 # Face-Recognition-with-EigenFace
 face recognition with eigenface
 
-*Reference
+# Reference
 
 http://conradsanderson.id.au/lfwcrop/
 
