@@ -192,7 +192,7 @@ if __name__ == '__main__':
 
 
     fig = plt.figure(2)
-    row1 = 5
+    row1 = 6
     col1 = 2
     i = 0
     j = 1
@@ -228,13 +228,18 @@ if __name__ == '__main__':
 
     total_similarity = 0
     cnt = 0
+    ax = fig.add_subplot(row1, col1, 11)
+
     for i in range(0,len(ck1)):
         for j in range(i+1,len(ck1)):
                 sim = cos_sim(ck1[j].T,ck1[i])
                 print(i,"와",j,"의 유사도",sim)
+                ax.scatter(5,sim)
                 total_similarity = total_similarity + sim
                 cnt = cnt+1
     print("1번째 Face에 대한 최종 유사도",total_similarity/cnt)
+
+    ax.set_xlabel("Similarity: ",total_similarity/cnt,fontsize=17)
 
     print("-------------------------------------")
 
