@@ -51,7 +51,6 @@ def readImages(path):
                 print("image:{} not read properly".format(imagePath))
             elif i == 50000:
                 break
-
             else:
 
                 im = np.float32(im)
@@ -175,7 +174,65 @@ if __name__ == '__main__':
     total_result10, ck10 = createFace(eigenFaces, testface10,mu)
 
 
+    total_result= []
+    total_result.append(total_result1)
+    total_result.append(total_result2)
+    total_result.append(total_result3)
+    total_result.append(total_result4)
+    total_result.append(total_result5)
+    total_result.append(total_result6)
+    total_result.append(total_result7)
+    total_result.append(total_result8)
+    total_result.append(total_result9)
+    total_result.append(total_result10)
 
+
+    total_test_face = []
+    total_test_face.append(testface1)
+    total_test_face.append(testface2)
+    total_test_face.append(testface3)
+    total_test_face.append(testface4)
+    total_test_face.append(testface5)
+    total_test_face.append(testface6)
+    total_test_face.append(testface7)
+    total_test_face.append(testface8)
+    total_test_face.append(testface9)
+    total_test_face.append(testface10)
+
+    total_co = []
+    total_co.append(ck1)
+    total_co.append(ck2)
+    total_co.append(ck3)
+    total_co.append(ck4)
+    total_co.append(ck5)
+    total_co.append(ck6)
+    total_co.append(ck7)
+    total_co.append(ck8)
+    total_co.append(ck9)
+    total_co.append(ck10)
+
+
+    representative_image = []
+    representative_image.append(total_co[0][4])
+    representative_image.append(total_co[1][0])
+    representative_image.append(total_co[2][1])
+    representative_image.append(total_co[3][3])
+    representative_image.append(total_co[4][3])
+    representative_image.append(total_co[5][0])
+    representative_image.append(total_co[6][4])
+    representative_image.append(total_co[7][4])
+    representative_image.append(total_co[8][3])
+    representative_image.append(total_co[9][2])
+
+    total_result = np.array(total_result)
+    total_test_face = np.array(total_test_face)
+    representative_image = np.array(representative_image)
+    total_co = np.array(total_co)
+
+    print(total_result.shape)
+    print(total_test_face.shape)
+    print(representative_image.shape)
+    print("Total_co: ",total_co.shape)
     fig = plt.figure(1)
     row = 8
     col = 8
@@ -239,7 +296,7 @@ if __name__ == '__main__':
                 cnt = cnt+1
     print("1번째 Face에 대한 최종 유사도",total_similarity/cnt)
 
-    ax.set_xlabel("Similarity: ",total_similarity/cnt,fontsize=17)
+#    ax.set_xlabel("Similarity: ",total_similarity/cnt,fontsize=17)
 
     print("-------------------------------------")
 
@@ -649,5 +706,44 @@ if __name__ == '__main__':
 
     print("-------------------------------------")
 
+    fig = plt.figure(12)
+
+    row1 = 10
+    col1 = 5
+
+    total_similarity = 0
+    l = 1
+    for i in range(0,10):
+        cnt = 0
+        for j in range(0,5):
+            result = total_result[i][j]
+            co = total_co[i][j]
+
+            resultToShow = result.reshape((32, 32))
+            ax = fig.add_subplot(row1, col1, l)
+            ax.imshow(resultToShow, 'gray')
+
+            correct = "일치X"
+            similarity = 1000000000
+
+            k = 0
+            for representative_co in representative_image:
+                #temp_similarity = cos_sim(representative_co.T, co)
+                temp_similarity = dist(representative_co, co)
+
+                if similarity > temp_similarity:
+                    similarity = temp_similarity
+                    correct = k
+                k= k+1
+            if i == correct:
+                cnt = cnt+1
+                total_similarity = total_similarity+1
+            ax.set_title(correct, fontsize=13)
+            l = l+1
+        cnt = cnt -1
+        total_similarity = total_similarity -1
+        print(i, "번째 사람에 대한 Face Recognition 정확도", (cnt / 5) * 100, "%")
+
+    print("최종 정확도",(total_similarity/50)*100,"%")
     plt.show()
 
